@@ -1,0 +1,73 @@
+#include <iostream>
+using namespace std;
+
+template<class itemtype>
+
+class arraylist {
+private:
+	static const int capacity=100;
+	itemtype items[capacity];
+	int itemcount;
+	int maxitems;
+public:
+	arraylist();
+	bool insert(int, const itemtype&);
+	bool remove(int);
+	
+	bool isempty();
+	itemtype getentry(int) const;
+};
+
+
+template<class itemtype>
+arraylist<itemtype>::arraylist() :itemcount(0), maxitems(capacity){}
+
+template<class itemtype>
+bool arraylist<itemtype>::isempty() {
+	return itemcount == 0;
+}
+
+
+template<class itemtype>
+bool arraylist<itemtype>::insert(int k, const itemtype & newentry) {
+	bool abletoinsert = (k >= 1) && (k <= itemcount + 1) && (itemcount < maxitems);
+	if (abletoinsert) {
+		for (int pos = itemcount; pos >= k; pos--)
+			items[pos] = items[pos - 1];
+		items[k - 1] = newentry;
+		itemcount++;
+	}
+	return abletoinsert;
+}
+
+
+template<class itemtype>
+bool arraylist<itemtype>::remove(int k) {
+	bool abletoremove = (k >= 1) && (k <= itemcount);
+	
+	if (abletoremove) {
+		for (int fromindex = k, toindex = fromindex - 1; fromindex < itemcount; fromindex++, toindex++)
+			items[toindex] = items[fromindex];
+			itemcount--;
+	}
+	return abletoremove;
+}
+
+template<class itemtype>
+itemtype arraylist<itemtype>::getentry(int k) const {
+	bool abletoget = (k >= 1) && (k <= itemcount);
+	if (abletoget) {
+		return items[k - 1];
+	}
+}
+
+void main() {
+	arraylist<int> a1;
+	int n;
+	cin >> n;
+	for (int i = 1; i <= n; i++) a1.insert(i, i*5);
+	for (int i = 1; i <= n; i++) cout<<a1.getentry(i)<<" ";
+	cout << endl;
+	a1.remove(5);
+	for (int i = 1; i<n; i++) cout << a1.getentry(i) << " ";
+}
